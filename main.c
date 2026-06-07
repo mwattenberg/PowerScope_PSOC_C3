@@ -37,12 +37,14 @@
 * so agrees to indemnify Cypress against all liability.
 *******************************************************************************/
 
+#include "cy_scb_spi.h"
 #include "mtb_hal.h"
 #include "cybsp.h"
 #include "cy_hppass.h"
 #include "cy_tcpwm_counter.h"
 #include "cy_sysint.h"
 #include "cy_sysclk.h"
+#include "cy_scb_uart.h"
 #include "cycfg_peripherals.h"
 #include "cycfg_clocks.h"
 #include "PowerScope.h"
@@ -51,7 +53,7 @@
  * The timer period is computed at runtime from the actual CLK_HF3 frequency
  * and the peripheral clock divider so the result is accurate across clock
  * tolerances (CLK_HF3 nominal 240 MHz ±1%). */
-#define SAMPLE_RATE_HZ  25000UL
+#define SAMPLE_RATE_HZ  5000UL
 
 static void TIMER_ADC_isr(void)
 {
@@ -78,8 +80,18 @@ static void init(void)
     Cy_HPPASS_AC_Start(0, 500);
     Cy_HPPASS_SAR_SetTempSensorCurrent(false);
 
-    /* Init PowerScope: UART + DMA buffer */
-    PowerScope_init();
+    /* Init SCB for UART, then hand the peripheral to PowerScope */
+    Cy_SCB_UART_Init(UART_HW, &UART_config, NULL);
+    Cy_SCB_UART_Enable(UART_HW);
+	
+	Cy_SCB_SPI_Init(SPI_HW, &SPI_config, NULL);
+	Cy_SCB_SPI_Enable(SPI_HW);
+	
+	//Use SPI for PowerScope
+    PowerScope_init(SPI_HW);
+
+	//Use UART for PowerScope
+	//PowerScope_init(UART_HW);
 
     /* Init and register timer ISR */
     cy_stc_sysint_t timerIrqCfg = { .intrSrc = TIMER_ADC_IRQ, .intrPriority = 3 };

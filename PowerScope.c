@@ -6,15 +6,54 @@
  */
 
 #include "PowerScope.h"
-#include "cy_scb_uart.h"
+#include <stdbool.h>
 #include "cy_sysint.h"
-#include "cycfg_peripherals.h"
+#include "cy_scb_uart.h"
+#include "cy_scb_spi.h"
 #ifdef USE_DMA
 #include "cy_dma.h"
-#include "cycfg_dmas.h"
 #endif
 
-#include <stdbool.h>
+#define PS_SCB_MODE_SPI   (1U)
+#define PS_SCB_MODE_UART  (2U)
+
+static CySCB_Type *PS_scbHw;
+static uint32_t    PS_scbMode;
+#ifdef USE_DMA
+
+static cy_stc_dma_descriptor_t PS_dmaDescriptor;
+
+static cy_stc_dma_descriptor_config_t PS_dmaDescriptorConfig =
+{
+    .retrigger       = CY_DMA_RETRIG_IM,
+    .interruptType   = CY_DMA_DESCR,
+    .triggerOutType  = CY_DMA_X_LOOP,
+    .channelState    = CY_DMA_CHANNEL_DISABLED,
+    .triggerInType   = CY_DMA_X_LOOP,
+    .dataSize        = CY_DMA_BYTE,
+    .srcTransferSize = CY_DMA_TRANSFER_SIZE_DATA,
+    .dstTransferSize = CY_DMA_TRANSFER_SIZE_WORD,
+    .descriptorType  = CY_DMA_1D_TRANSFER,
+    .srcAddress      = NULL,
+    .dstAddress      = NULL,
+    .srcXincrement   = 1,
+    .dstXincrement   = 0,
+    .xCount          = 8,
+    .srcYincrement   = 1,
+    .dstYincrement   = 1,
+    .yCount          = 1,
+    .nextDescriptor  = &PS_dmaDescriptor,
+};
+
+static cy_stc_dma_channel_config_t PS_dmaChannelConfig =
+{
+    .descriptor  = &PS_dmaDescriptor,
+    .preemptable = false,
+    .priority    = 3,
+    .enable      = false,
+    .bufferable  = false,
+};
+#endif /* USE_DMA */
 
 static PowerScope_buffer_t buffer;
 static PowerScope_buffer_t *myBuffer;
@@ -25,10 +64,10 @@ static void PowerScope_initBuffer(PowerScope_buffer_t *buffer);
 static void PowerScope_addFrame(PowerScope_buffer_t *buffer, channel_data_t *channel_data);
 static void PowerScope_writeBufferToOutput(PowerScope_buffer_t *buffer);
 
-void PowerScope_init(void)
+void PowerScope_init(CySCB_Type *hw)
 {
-    Cy_SCB_UART_Init(UART_HW, &UART_config, NULL);
-    Cy_SCB_UART_Enable(UART_HW);
+    PS_scbHw   = hw;
+    PS_scbMode = _FLD2VAL(SCB_CTRL_MODE, hw->CTRL);
 
     PowerScope_initBuffer(&buffer);
 }
@@ -51,7 +90,7 @@ static void PowerScope_dmaCallback(void)
     myBuffer->data_is_currently_being_written = false;
     myBuffer->current_frame = 0;
 
-    Cy_DMA_Channel_ClearInterrupt(DMA_PowerScope_HW, DMA_PowerScope_CHANNEL);
+    Cy_DMA_Channel_ClearInterrupt(PS_DMA_HW, PS_DMA_CHANNEL);
 }
 
 static void PowerScope_initDMA(PowerScope_buffer_t *buf)
@@ -62,30 +101,26 @@ static void PowerScope_initDMA(PowerScope_buffer_t *buf)
     while (((framesPerXTransfer + 1) * bytePerFrame) < 128 && framesPerXTransfer < PowerScope_NUMBER_OF_FRAMES)
         framesPerXTransfer++;
 
-    cy_stc_dma_descriptor_config_t descCfg = DMA_PowerScope_Descriptor_0_config;
-    descCfg.xCount          = framesPerXTransfer * bytePerFrame;
-    descCfg.dataSize        = CY_DMA_BYTE;
-    descCfg.srcTransferSize = CY_DMA_TRANSFER_SIZE_DATA;
-    descCfg.dstTransferSize = CY_DMA_TRANSFER_SIZE_WORD;
-    descCfg.yCount          = PowerScope_NUMBER_OF_FRAMES / framesPerXTransfer;
-    if (descCfg.yCount == 0)
-        descCfg.yCount = 1;
-    descCfg.srcYincrement   = (int32_t)descCfg.xCount;
+    PS_dmaDescriptorConfig.xCount       = framesPerXTransfer * bytePerFrame;
+    PS_dmaDescriptorConfig.yCount       = PowerScope_NUMBER_OF_FRAMES / framesPerXTransfer;
+    if (PS_dmaDescriptorConfig.yCount == 0)
+        PS_dmaDescriptorConfig.yCount   = 1;
+    PS_dmaDescriptorConfig.srcYincrement = (int32_t)PS_dmaDescriptorConfig.xCount;
 
-    Cy_DMA_Descriptor_Init(&DMA_PowerScope_Descriptor_0, &descCfg);
-    Cy_DMA_Descriptor_SetSrcAddress(&DMA_PowerScope_Descriptor_0, buf->data);
-    Cy_DMA_Descriptor_SetDstAddress(&DMA_PowerScope_Descriptor_0, (void *)(&SCB_TX_FIFO_WR(UART_HW)));
+    Cy_DMA_Descriptor_Init(&PS_dmaDescriptor, &PS_dmaDescriptorConfig);
+    Cy_DMA_Descriptor_SetSrcAddress(&PS_dmaDescriptor, buf->data);
+    Cy_DMA_Descriptor_SetDstAddress(&PS_dmaDescriptor, (void *)(&SCB_TX_FIFO_WR(PS_scbHw)));
 
-    Cy_DMA_Channel_Init(DMA_PowerScope_HW, DMA_PowerScope_CHANNEL, &DMA_PowerScope_channelConfig);
-    Cy_DMA_Channel_SetDescriptor(DMA_PowerScope_HW, DMA_PowerScope_CHANNEL, &DMA_PowerScope_Descriptor_0);
-    Cy_DMA_Channel_SetInterruptMask(DMA_PowerScope_HW, DMA_PowerScope_CHANNEL, CY_DMA_INTR_MASK);
+    Cy_DMA_Channel_Init(PS_DMA_HW, PS_DMA_CHANNEL, &PS_dmaChannelConfig);
+    Cy_DMA_Channel_SetDescriptor(PS_DMA_HW, PS_DMA_CHANNEL, &PS_dmaDescriptor);
+    Cy_DMA_Channel_SetInterruptMask(PS_DMA_HW, PS_DMA_CHANNEL, CY_DMA_INTR_MASK);
 
-    cy_stc_sysint_t irqCfg = { .intrSrc = DMA_PowerScope_IRQ, .intrPriority = 3 };
+    cy_stc_sysint_t irqCfg = { .intrSrc = PS_DMA_IRQ, .intrPriority = 3 };
     Cy_SysInt_Init(&irqCfg, PowerScope_dmaCallback);
-    NVIC_ClearPendingIRQ(DMA_PowerScope_IRQ);
-    NVIC_EnableIRQ(DMA_PowerScope_IRQ);
+    NVIC_ClearPendingIRQ(PS_DMA_IRQ);
+    NVIC_EnableIRQ(PS_DMA_IRQ);
 
-    Cy_DMA_Enable(DMA_PowerScope_HW);
+    Cy_DMA_Enable(PS_DMA_HW);
 }
 #endif /* USE_DMA */
 
@@ -126,13 +161,18 @@ static void PowerScope_writeBufferToOutput(PowerScope_buffer_t *buf)
     buf->data_is_currently_being_written = true;
 
 #ifdef USE_DMA
-    Cy_DMA_Channel_Enable(DMA_PowerScope_HW, DMA_PowerScope_CHANNEL);
+    Cy_DMA_Channel_Enable(PS_DMA_HW, PS_DMA_CHANNEL);
 #else
     uint32_t buffer_length = sizeof(buf->data);
     uint32_t dataSend = 0;
 
     while (buffer_length - dataSend > 0)
-        dataSend += Cy_SCB_UART_PutArray(UART_HW, (void *)(buf->data + dataSend), buffer_length - dataSend);
+    {
+        if (PS_scbMode == PS_SCB_MODE_SPI)
+            dataSend += Cy_SCB_SPI_WriteArray(PS_scbHw, (void *)(buf->data + dataSend), buffer_length - dataSend);
+        else
+            dataSend += Cy_SCB_UART_PutArray(PS_scbHw, (void *)(buf->data + dataSend), buffer_length - dataSend);
+    }
 
     buf->data_is_currently_being_written = false;
     buf->current_frame = 0;
