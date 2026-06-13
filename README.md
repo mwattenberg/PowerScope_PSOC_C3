@@ -22,7 +22,9 @@ Each frame is `2 + N × 2` bytes, where N is the number of channels configured a
 
 Frames are transmitted back-to-back with no gap. There is no CRC or checksum — error checking is omitted in favour of throughput.
 
-The host must be configured with the same channel count before connecting. It uses this to compute the exact frame size, then scans the stream for the `0xAA 0xAA` sync pattern and reads exactly `N × 2` payload bytes after each match.
+The host must be configured with the same channel count before connecting. It uses this to compute the exact frame size, then scans the stream for the sync pattern and reads exactly `N × 2` payload bytes after each match.
+
+The sync word `0xAA 0xAA` was chosen because the alternating bit pattern is easy to identify on a logic analyzer, but it is not a protocol requirement — any two-byte sequence unlikely to appear in the payload can be used.
 
 ## Interface
 
