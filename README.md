@@ -10,6 +10,8 @@ Demo firmware for the Infineon PSoC Control C3 (PSC3M5) that samples 8 ADC chann
 
 ## PowerScope frame format
 
+![Frame format](docs/frame_format.svg)
+
 Each frame is `2 + N × 2` bytes, where N is the number of channels configured at compile time (`PowerScope_NUMBER_OF_CHANNELS`, default 8):
 
 | Bytes       | Content |

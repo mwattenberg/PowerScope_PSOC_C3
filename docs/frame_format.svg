@@ -1,0 +1,192 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" font-family="monospace" font-size="13">
+
+  <!-- Background -->
+  <rect width="800" height="340" fill="#1e1e2e"/>
+
+  <!-- ─── TITLE: Stream ─── -->
+  <text x="20" y="30" fill="#cdd6f4" font-size="14" font-weight="bold">Data Stream (continuous, no gaps)</text>
+
+  <!-- Stream row y=55 -->
+  <!-- Frame 0 -->
+  <rect x="20"  y="45" width="40"  height="34" fill="#f38ba8" stroke="#1e1e2e" stroke-width="1"/>
+  <rect x="60"  y="45" width="220" height="34" fill="#a6e3a1" stroke="#1e1e2e" stroke-width="1"/>
+  <!-- Frame 1 -->
+  <rect x="280" y="45" width="40"  height="34" fill="#f38ba8" stroke="#1e1e2e" stroke-width="1"/>
+  <rect x="320" y="45" width="220" height="34" fill="#a6e3a1" stroke="#1e1e2e" stroke-width="1"/>
+  <!-- Frame 2 -->
+  <rect x="540" y="45" width="40"  height="34" fill="#f38ba8" stroke="#1e1e2e" stroke-width="1"/>
+  <rect x="580" y="45" width="180" height="34" fill="#a6e3a1" stroke="#1e1e2e" stroke-width="1"/>
+  <!-- Ellipsis -->
+  <text x="766" y="67" fill="#cdd6f4" font-size="18">…</text>
+
+  <!-- Stream labels -->
+  <text x="25"  y="66" fill="#1e1e2e" font-size="11" font-weight="bold">SYNC</text>
+  <text x="118" y="66" fill="#1e1e2e" font-size="11" font-weight="bold">Payload (N×2 bytes)</text>
+  <text x="285" y="66" fill="#1e1e2e" font-size="11" font-weight="bold">SYNC</text>
+  <text x="378" y="66" fill="#1e1e2e" font-size="11" font-weight="bold">Payload (N×2 bytes)</text>
+  <text x="545" y="66" fill="#1e1e2e" font-size="11" font-weight="bold">SYNC</text>
+  <text x="618" y="66" fill="#1e1e2e" font-size="11" font-weight="bold">Payload …</text>
+
+  <!-- Frame labels below stream -->
+  <text x="105" y="97"  fill="#cdd6f4" font-size="11">Frame 0</text>
+  <text x="365" y="97"  fill="#cdd6f4" font-size="11">Frame 1</text>
+  <text x="625" y="97"  fill="#cdd6f4" font-size="11">Frame 2</text>
+
+  <!-- Bracket Frame 0 -->
+  <line x1="20"  y1="88" x2="20"  y2="93" stroke="#6c7086" stroke-width="1"/>
+  <line x1="20"  y1="93" x2="279" y2="93" stroke="#6c7086" stroke-width="1"/>
+  <line x1="279" y1="88" x2="279" y2="93" stroke="#6c7086" stroke-width="1"/>
+  <!-- Bracket Frame 1 -->
+  <line x1="280" y1="88" x2="280" y2="93" stroke="#6c7086" stroke-width="1"/>
+  <line x1="280" y1="93" x2="539" y2="93" stroke="#6c7086" stroke-width="1"/>
+  <line x1="539" y1="88" x2="539" y2="93" stroke="#6c7086" stroke-width="1"/>
+  <!-- Bracket Frame 2 -->
+  <line x1="540" y1="88" x2="540" y2="93" stroke="#6c7086" stroke-width="1"/>
+  <line x1="540" y1="93" x2="759" y2="93" stroke="#6c7086" stroke-width="1"/>
+  <line x1="759" y1="88" x2="759" y2="93" stroke="#6c7086" stroke-width="1"/>
+
+
+  <!-- ─── DIVIDER ─── -->
+  <line x1="20" y1="118" x2="780" y2="118" stroke="#45475a" stroke-width="1"/>
+
+  <!-- ─── TITLE: Single Frame ─── -->
+  <text x="20" y="142" fill="#cdd6f4" font-size="14" font-weight="bold">Single Frame (N=8 channels → 18 bytes total)</text>
+
+  <!-- Single frame row y=155 -->
+  <!-- Sync bytes -->
+  <rect x="20"  y="152" width="60" height="44" fill="#f38ba8" stroke="#1e1e2e" stroke-width="1"/>
+  <rect x="80"  y="152" width="60" height="44" fill="#f38ba8" stroke="#1e1e2e" stroke-width="1"/>
+  <!-- Ch0 -->
+  <rect x="140" y="152" width="40" height="44" fill="#89b4fa" stroke="#1e1e2e" stroke-width="1"/>
+  <rect x="180" y="152" width="40" height="44" fill="#74c7ec" stroke="#1e1e2e" stroke-width="1"/>
+  <!-- Ch1 -->
+  <rect x="220" y="152" width="40" height="44" fill="#89b4fa" stroke="#1e1e2e" stroke-width="1"/>
+  <rect x="260" y="152" width="40" height="44" fill="#74c7ec" stroke="#1e1e2e" stroke-width="1"/>
+  <!-- Ch2 -->
+  <rect x="300" y="152" width="40" height="44" fill="#89b4fa" stroke="#1e1e2e" stroke-width="1"/>
+  <rect x="340" y="152" width="40" height="44" fill="#74c7ec" stroke="#1e1e2e" stroke-width="1"/>
+  <!-- Ch3 -->
+  <rect x="380" y="152" width="40" height="44" fill="#89b4fa" stroke="#1e1e2e" stroke-width="1"/>
+  <rect x="420" y="152" width="40" height="44" fill="#74c7ec" stroke="#1e1e2e" stroke-width="1"/>
+  <!-- Ch4 -->
+  <rect x="460" y="152" width="40" height="44" fill="#89b4fa" stroke="#1e1e2e" stroke-width="1"/>
+  <rect x="500" y="152" width="40" height="44" fill="#74c7ec" stroke="#1e1e2e" stroke-width="1"/>
+  <!-- Ch5 -->
+  <rect x="540" y="152" width="40" height="44" fill="#89b4fa" stroke="#1e1e2e" stroke-width="1"/>
+  <rect x="580" y="152" width="40" height="44" fill="#74c7ec" stroke="#1e1e2e" stroke-width="1"/>
+  <!-- Ch6 -->
+  <rect x="620" y="152" width="40" height="44" fill="#89b4fa" stroke="#1e1e2e" stroke-width="1"/>
+  <rect x="660" y="152" width="40" height="44" fill="#74c7ec" stroke="#1e1e2e" stroke-width="1"/>
+  <!-- Ch7 -->
+  <rect x="700" y="152" width="40" height="44" fill="#89b4fa" stroke="#1e1e2e" stroke-width="1"/>
+  <rect x="740" y="152" width="40" height="44" fill="#74c7ec" stroke="#1e1e2e" stroke-width="1"/>
+
+  <!-- Byte values -->
+  <text x="37"  y="172" fill="#1e1e2e" font-size="11" font-weight="bold">0xAA</text>
+  <text x="97"  y="172" fill="#1e1e2e" font-size="11" font-weight="bold">0xAA</text>
+  <text x="145" y="172" fill="#1e1e2e" font-size="10">lo</text>
+  <text x="185" y="172" fill="#1e1e2e" font-size="10">hi</text>
+  <text x="225" y="172" fill="#1e1e2e" font-size="10">lo</text>
+  <text x="265" y="172" fill="#1e1e2e" font-size="10">hi</text>
+  <text x="305" y="172" fill="#1e1e2e" font-size="10">lo</text>
+  <text x="345" y="172" fill="#1e1e2e" font-size="10">hi</text>
+  <text x="385" y="172" fill="#1e1e2e" font-size="10">lo</text>
+  <text x="425" y="172" fill="#1e1e2e" font-size="10">hi</text>
+  <text x="465" y="172" fill="#1e1e2e" font-size="10">lo</text>
+  <text x="505" y="172" fill="#1e1e2e" font-size="10">hi</text>
+  <text x="545" y="172" fill="#1e1e2e" font-size="10">lo</text>
+  <text x="585" y="172" fill="#1e1e2e" font-size="10">hi</text>
+  <text x="625" y="172" fill="#1e1e2e" font-size="10">lo</text>
+  <text x="665" y="172" fill="#1e1e2e" font-size="10">hi</text>
+  <text x="705" y="172" fill="#1e1e2e" font-size="10">lo</text>
+  <text x="745" y="172" fill="#1e1e2e" font-size="10">hi</text>
+
+  <!-- Byte indices -->
+  <text x="44"  y="188" fill="#1e1e2e" font-size="10">[0]</text>
+  <text x="104" y="188" fill="#1e1e2e" font-size="10">[1]</text>
+  <text x="148" y="188" fill="#1e1e2e" font-size="10">[2]</text>
+  <text x="188" y="188" fill="#1e1e2e" font-size="10">[3]</text>
+  <text x="228" y="188" fill="#1e1e2e" font-size="10">[4]</text>
+  <text x="268" y="188" fill="#1e1e2e" font-size="10">[5]</text>
+  <text x="308" y="188" fill="#1e1e2e" font-size="10">[6]</text>
+  <text x="348" y="188" fill="#1e1e2e" font-size="10">[7]</text>
+  <text x="388" y="188" fill="#1e1e2e" font-size="10">[8]</text>
+  <text x="428" y="188" fill="#1e1e2e" font-size="10">[9]</text>
+  <text x="464" y="188" fill="#1e1e2e" font-size="10">[10]</text>
+  <text x="504" y="188" fill="#1e1e2e" font-size="10">[11]</text>
+  <text x="544" y="188" fill="#1e1e2e" font-size="10">[12]</text>
+  <text x="584" y="188" fill="#1e1e2e" font-size="10">[13]</text>
+  <text x="624" y="188" fill="#1e1e2e" font-size="10">[14]</text>
+  <text x="664" y="188" fill="#1e1e2e" font-size="10">[15]</text>
+  <text x="704" y="188" fill="#1e1e2e" font-size="10">[16]</text>
+  <text x="744" y="188" fill="#1e1e2e" font-size="10">[17]</text>
+
+  <!-- Channel labels below -->
+  <!-- Sync bracket -->
+  <line x1="20"  y1="204" x2="20"  y2="209" stroke="#f38ba8" stroke-width="1"/>
+  <line x1="20"  y1="209" x2="139" y2="209" stroke="#f38ba8" stroke-width="1"/>
+  <line x1="139" y1="204" x2="139" y2="209" stroke="#f38ba8" stroke-width="1"/>
+  <text x="47" y="222" fill="#f38ba8" font-size="11">Sync</text>
+
+  <!-- Ch0 bracket -->
+  <line x1="140" y1="204" x2="140" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <line x1="140" y1="209" x2="219" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <line x1="219" y1="204" x2="219" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <text x="152" y="222" fill="#89dceb" font-size="11">Ch 0</text>
+
+  <!-- Ch1 bracket -->
+  <line x1="220" y1="204" x2="220" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <line x1="220" y1="209" x2="299" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <line x1="299" y1="204" x2="299" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <text x="232" y="222" fill="#89dceb" font-size="11">Ch 1</text>
+
+  <!-- Ch2 bracket -->
+  <line x1="300" y1="204" x2="300" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <line x1="300" y1="209" x2="379" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <line x1="379" y1="204" x2="379" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <text x="312" y="222" fill="#89dceb" font-size="11">Ch 2</text>
+
+  <!-- Ch3 bracket -->
+  <line x1="380" y1="204" x2="380" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <line x1="380" y1="209" x2="459" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <line x1="459" y1="204" x2="459" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <text x="392" y="222" fill="#89dceb" font-size="11">Ch 3</text>
+
+  <!-- Ch4 bracket -->
+  <line x1="460" y1="204" x2="460" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <line x1="460" y1="209" x2="539" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <line x1="539" y1="204" x2="539" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <text x="472" y="222" fill="#89dceb" font-size="11">Ch 4</text>
+
+  <!-- Ch5 bracket -->
+  <line x1="540" y1="204" x2="540" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <line x1="540" y1="209" x2="619" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <line x1="619" y1="204" x2="619" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <text x="552" y="222" fill="#89dceb" font-size="11">Ch 5</text>
+
+  <!-- Ch6 bracket -->
+  <line x1="620" y1="204" x2="620" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <line x1="620" y1="209" x2="699" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <line x1="699" y1="204" x2="699" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <text x="632" y="222" fill="#89dceb" font-size="11">Ch 6</text>
+
+  <!-- Ch7 bracket -->
+  <line x1="700" y1="204" x2="700" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <line x1="700" y1="209" x2="779" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <line x1="779" y1="204" x2="779" y2="209" stroke="#89dceb" stroke-width="1"/>
+  <text x="712" y="222" fill="#89dceb" font-size="11">Ch 7</text>
+
+  <!-- ─── LEGEND ─── -->
+  <line x1="20" y1="242" x2="780" y2="242" stroke="#45475a" stroke-width="1"/>
+  <text x="20" y="262" fill="#cdd6f4" font-size="12" font-weight="bold">Legend</text>
+
+  <rect x="20"  y="272" width="18" height="12" fill="#f38ba8"/>
+  <text x="44"  y="283" fill="#cdd6f4" font-size="12">Sync word (configurable, default 0xAA 0xAA)</text>
+
+  <rect x="20"  y="292" width="18" height="12" fill="#89b4fa"/>
+  <text x="44"  y="303" fill="#cdd6f4" font-size="12">Low byte (little-endian int16)</text>
+
+  <rect x="20"  y="312" width="18" height="12" fill="#74c7ec"/>
+  <text x="44"  y="323" fill="#cdd6f4" font-size="12">High byte (little-endian int16)</text>
+
+</svg>
