@@ -10,17 +10,19 @@ Demo firmware for the Infineon PSoC Control C3 (PSC3M5) that samples 8 ADC chann
 
 ## PowerScope frame format
 
-Each frame is 18 bytes:
+Each frame is `2 + N × 2` bytes, where N is the number of channels configured at compile time (`PowerScope_NUMBER_OF_CHANNELS`, default 8):
 
-| Bytes | Content |
-|-------|---------|
-| 0–1   | Start sequence: `0xAA 0xAA` |
-| 2–3   | Channel 0 (int16, little-endian) |
-| 4–5   | Channel 1 (int16, little-endian) |
-| ...   | ... |
-| 16–17 | Channel 7 (int16, little-endian) |
+| Bytes       | Content |
+|-------------|---------|
+| 0–1         | Start sequence: `0xAA 0xAA` |
+| 2–3         | Channel 0 (int16, little-endian) |
+| 4–5         | Channel 1 (int16, little-endian) |
+| ...         | ... |
+| 2+N×2–1     | Channel N-1 (int16, little-endian) |
 
-Frames are transmitted back-to-back with no gap. The host synchronises by scanning for the `0xAA 0xAA` pattern.
+Frames are transmitted back-to-back with no gap. There is no CRC or checksum — error checking is omitted in favour of throughput.
+
+The host must be configured with the same channel count before connecting. It uses this to compute the exact frame size, then scans the stream for the `0xAA 0xAA` sync pattern and reads exactly `N × 2` payload bytes after each match.
 
 ## Interface
 
