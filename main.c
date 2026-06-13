@@ -53,7 +53,7 @@
  * The timer period is computed at runtime from the actual CLK_HF3 frequency
  * and the peripheral clock divider so the result is accurate across clock
  * tolerances (CLK_HF3 nominal 240 MHz ±1%). */
-#define SAMPLE_RATE_HZ  5000UL
+#define SAMPLE_RATE_HZ  150000UL
 
 static void TIMER_ADC_isr(void)
 {
